@@ -15,8 +15,9 @@ branches:
 
 script:
   - doit
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then doit coverage; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then coveralls; fi
+  - py.test
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then doit coverage; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then coveralls; fi
 
 notifications:
     email:
