@@ -1,0 +1,6 @@
+# modules required for development only
+# $ pip install --requirement dev_requirements.txt
+
+pytest
+coverage
+sphinx

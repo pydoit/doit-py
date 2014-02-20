@@ -25,14 +25,14 @@ class Pyflakes(object):
 
 
     def __call__(self, py_file):
-        """return task metada to jshint single file"""
+        """return task metadata to run pyflakes on a single module"""
         return {
             'name': py_file,
             'actions': [(check_path, [py_file])],
             'file_dep': [py_file],
             }
 
-    def tasks(self, pattern, exclude_path=()):
+    def tasks(self, pattern, base_dir='.', exclude_path=()):
         """yield tasks as given by pattern
 
         @param pattern: (list - str) list of path patterns of files to be linted
@@ -41,11 +41,11 @@ class Pyflakes(object):
         """
 
         # yield a task for every py file in selection
-        base = Path('.')
+        base = Path(base_dir)
         excluded_path = set([base.joinpath(e) for e in exclude_path])
         for src in base.glob(pattern):
             if src in excluded_path:
-                break
+                continue
             for exclude_pattern in self.exclude_patterns:
                 if src.match(exclude_pattern):
                     break
