@@ -6,7 +6,7 @@ DOIT_CONFIG = {'default_tasks': ['pyflakes']}
 
 
 def task_pyflakes():
-    yield Pyflakes().tasks('**/*.py', exclude_path=['sample_fail.py'])
+    yield Pyflakes().tasks('**/*.py', exclude_path=['test/sample_fail.py'])
 
 
 def task_coverage():

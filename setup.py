@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup (
-    name = 'doitpy',
+    name = 'doit-py',
     version = '0.1.dev0',
     author = 'Eduardo Naufel Schettino',
     author_email = 'schettino72@gmail.com',
