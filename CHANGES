@@ -7,3 +7,4 @@ Changes
 ==========
 
  - added pyflakes module
+ - added coverage module
