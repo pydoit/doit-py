@@ -14,9 +14,9 @@ class TestCheckPath(object):
 class TestPyflakes(object):
     def test_init(self):
         obj = pyflakes.Pyflakes()
-        assert obj.exclude_patterns == ()
-        obj = pyflakes.Pyflakes(['.#*'])
-        assert obj.exclude_patterns == ['.#*']
+        assert obj.config['exclude_patterns'] == []
+        obj = pyflakes.Pyflakes(exclude_patterns=['.#*'])
+        assert obj.config['exclude_patterns'] == ['.#*']
 
     def test_call(self):
         obj = pyflakes.Pyflakes()
@@ -27,7 +27,7 @@ class TestPyflakes(object):
         exclude_pattern = 'test_*'
         check_pattern = '*.py'
         exclude_path = 'sample_fail.py'
-        obj = pyflakes.Pyflakes([exclude_pattern])
+        obj = pyflakes.Pyflakes(exclude_patterns=[exclude_pattern])
         tasks = list(obj.tasks(check_pattern, TEST_PATH, [exclude_path]))
         assert len(tasks) == 1
         assert tasks[0]['name'] == '{}/sample_ok.py'.format(TEST_PATH)

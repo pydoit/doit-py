@@ -11,7 +11,7 @@ def task_pyflakes():
 
 def task_coverage():
     cov = Coverage([PythonPackage('doitpy', test_path='tests')],
-                   omit=['"tests/sample_*"'])
+                   config={'omit':['"tests/sample_*"']})
     yield cov.all()
     yield cov.src()
     yield cov.by_module()

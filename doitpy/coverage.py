@@ -6,9 +6,13 @@ create tasks for coverage.py
 """
 import glob
 
+from .config import Config
+
+
 class PythonPackage(object):
     # TODO should track sub-packages
     TEST_PREFIX = 'test_'
+
     def __init__(self, name, test_path=None):
         """if test_path is not given assume it is 'tests' inside source package"""
         self.name = name
@@ -29,12 +33,14 @@ class PythonPackage(object):
 
 class Coverage(object):
     """python code coverage"""
-    CMD_RUN_TEST = "`which py.test`"
+    config = Config(
+        cmd_run_test = "`which py.test`",
+        branch=True,
+        parallel=False,
+        omit=[])
 
-    def __init__(self, pkgs, branch=True, parallel=False, omit=()):
-        self.branch = branch
-        self.parallel = parallel
-        self.omit = omit
+    def __init__(self, pkgs, config=None):
+        self.config = self.config.push(config)
         self.pkgs = []
         for pkg in pkgs:
             if isinstance(pkg, PythonPackage):
@@ -45,18 +51,18 @@ class Coverage(object):
 
     def _action_list(self, modules, test=''):
         run_options = ''
-        if self.branch:
+        if self.config['branch']:
             run_options += '--branch '
-        if self.parallel:
+        if self.config['parallel']:
             run_options += '--parallel-mode '
 
         report_options = ''
-        if self.omit:
-            report_options += '--omit {}'.format(','.join(self.omit))
+        if self.config['omit']:
+            report_options += '--omit {}'.format(','.join(self.config['omit']))
 
         actions = ["coverage run {} {} {}".format(
-                run_options, self.CMD_RUN_TEST, test)]
-        if self.parallel:
+                run_options, self.config['cmd_run_test'], test)]
+        if self.config['parallel']:
             actions.append('coverage combine')
         actions.append("coverage report --show-missing {} {}".format(
                 report_options, " ".join(modules)))
@@ -95,8 +101,8 @@ class Coverage(object):
     def by_module(self):
         """show coverage for individual modules"""
         for pkg in self.pkgs:
-            to_strip = len(pkg.test_base + '/test_')
-            tests = glob.glob(pkg.test_base + "/test_*.py")
+            to_strip = len('{}/{}'.format(pkg.test_base, pkg.TEST_PREFIX))
+            tests = glob.glob('{}/{}*.py'.format(pkg.test_base, pkg.TEST_PREFIX))
             for test in tests:
                 source = pkg.src_base + '/' + test[to_strip:]
                 yield {

@@ -3,6 +3,8 @@ from __future__ import absolute_import
 from pathlib import Path
 from pyflakes.scripts.pyflakes import checkPath
 
+from .config import Config
+
 
 def check_path(filename):
     """a doit action - execute pyflakes in a single file.
@@ -12,17 +14,13 @@ def check_path(filename):
 
 
 class Pyflakes(object):
-    EXCLUDE_PATTERNS = ( )
+    config = Config(exclude_patterns=[])
 
-    def __init__(self, exclude_patterns=None):
+    def __init__(self, **kwargs):
         """
         @param exclude_patterns: (list - str) pathlib patterns to be excluded
         """
-        if exclude_patterns is None:
-            self.exclude_patterns = self.EXCLUDE_PATTERNS
-        else:
-            self.exclude_patterns = exclude_patterns
-
+        self.config = self.config.push(kwargs)
 
     def __call__(self, py_file):
         """return task metadata to run pyflakes on a single module"""
@@ -46,7 +44,7 @@ class Pyflakes(object):
         for src in base.glob(pattern):
             if src in excluded_path:
                 continue
-            for exclude_pattern in self.exclude_patterns:
+            for exclude_pattern in self.config['exclude_patterns']:
                 if src.match(exclude_pattern):
                     break
             else:
