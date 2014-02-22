@@ -80,7 +80,8 @@ class Coverage(object):
         yield {
             'basename': 'coverage',
             'actions': self._action_list(all_modules),
-            'verbosity': 2}
+            'verbosity': 2,
+            }
 
 
     def src(self):
