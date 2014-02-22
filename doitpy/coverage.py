@@ -40,7 +40,7 @@ class Coverage(object):
         omit=[])
 
     def __init__(self, pkgs, config=None):
-        self.config = self.config.push(config)
+        self.config = self.config.make(config)
         self.pkgs = []
         for pkg in pkgs:
             if isinstance(pkg, PythonPackage):

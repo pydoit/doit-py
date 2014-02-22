@@ -20,7 +20,7 @@ class Pyflakes(object):
         """
         @param exclude_patterns: (list - str) pathlib patterns to be excluded
         """
-        self.config = self.config.push(kwargs)
+        self.config = self.config.make(kwargs)
 
     def __call__(self, py_file):
         """return task metadata to run pyflakes on a single module"""

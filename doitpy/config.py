@@ -3,6 +3,13 @@ class Config(dict):
     def __init__(self, *args, **kwargs):
         dict.__init__(self, *args, **kwargs)
 
+    def __setitem__(self, key, value):
+        """make sure new items are not added after initialization"""
+        if key not in self:
+            msg = 'New items can not be added to Config, invalid key:{}'
+            raise KeyError(msg.format(key))
+        super(Config, self).__setitem__(key, value)
+
     # http://stackoverflow.com/questions/2060972
     # subclassing-python-dictionary-to-override-setitem
     def update(self, *args, **kwargs):
@@ -22,19 +29,20 @@ class Config(dict):
         return self[key]
     # end - redefinition of methods to make sure __setitem__ is always called
 
-    def __setitem__(self, key, value):
-        assert key in self
-        super(Config, self).__setitem__(key, value)
-
     def copy(self):
         """copy that returns a Config object instead of plain dict"""
-        return self.__class__(dict.copy(self))
+        return self.__class__(self)
 
 
-    # extra methods
-    def push(self, other):
+    # non-dict methods
+    def make(self, *args, **kwargs):
+        """return new Config, updating with given values
+
+        Also accepts None as single argument, in this case just return a copy
+        of self.
+        """
         result = self.copy()
-        if other is not None:
-            result.update(other)
+        if not(args and args[0] is None):
+            result.update(*args, **kwargs)
         return result
 
