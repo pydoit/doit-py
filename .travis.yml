@@ -17,7 +17,10 @@ script:
   - doit
   - py.test
   - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then doit coverage; fi
+
+after_success:
   - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then coveralls; fi
+
 
 notifications:
     email:
