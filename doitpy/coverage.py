@@ -11,20 +11,26 @@ from .config import Config
 
 class PythonPackage(object):
     # TODO should track sub-packages
-    TEST_PREFIX = 'test_'
+    config = Config(
+        test_prefix = 'test_',
+        pkg_test_dir = 'tests',
+        )
 
-    def __init__(self, name, test_path=None):
+    def __init__(self, path, test_path=None, config=None):
         """if test_path is not given assume it is 'tests' inside source package"""
-        self.name = name
-        self.src_base = name if name else ''
+        self.config = self.config.make(config)
+        self.test_prefix = self.config['test_prefix']
+
+        self.src_base = path if path else ''
         if test_path is None:
-            self.test_base = '{}/tests'.format(self.src_base)
+            self.test_base = '{}/{}'.format(self.src_base,
+                                            self.config['pkg_test_dir'])
         else:
             self.test_base = test_path
         self.src = glob.glob("{}/*.py".format(self.src_base))
         self.test = glob.glob("{}/*.py".format(self.test_base))
         self.test_files = glob.glob("{}/{}*.py".format(
-                self.test_base, self.TEST_PREFIX))
+                self.test_base, self.test_prefix))
 
     def all_modules(self):
         for mod in self.src + self.test:
@@ -102,8 +108,9 @@ class Coverage(object):
     def by_module(self):
         """show coverage for individual modules"""
         for pkg in self.pkgs:
-            to_strip = len('{}/{}'.format(pkg.test_base, pkg.TEST_PREFIX))
-            tests = glob.glob('{}/{}*.py'.format(pkg.test_base, pkg.TEST_PREFIX))
+            to_strip = len('{}/{}'.format(pkg.test_base, pkg.test_prefix))
+            tests = glob.glob('{}/{}*.py'.format(pkg.test_base,
+                                                 pkg.test_prefix))
             for test in tests:
                 source = pkg.src_base + '/' + test[to_strip:]
                 yield {

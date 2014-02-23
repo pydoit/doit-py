@@ -1,15 +1,15 @@
-import os
+from pathlib import Path
 
 from doitpy import pyflakes
 
 
-TEST_PATH = os.path.dirname(__file__)
+TEST_PATH = Path(__file__).parent
 
 class TestCheckPath(object):
     def test_success(self):
-        assert pyflakes.check_path('{}/sample_ok.py'.format(TEST_PATH))
+        assert pyflakes.check_path(str(TEST_PATH / 'sample/flake_ok.py'))
     def test_failure(self):
-        assert not pyflakes.check_path('{}/sample_fail.py'.format(TEST_PATH))
+        assert not pyflakes.check_path(str(TEST_PATH / 'sample/flake_fail.py'))
 
 class TestPyflakes(object):
     def test_init(self):
@@ -24,10 +24,11 @@ class TestPyflakes(object):
         assert task_dict['file_dep'] == ['my_module.py']
 
     def test_tasks(self):
-        exclude_pattern = 'test_*'
-        check_pattern = '*.py'
-        exclude_path = 'sample_fail.py'
+        exclude_pattern = 'tests/*'
+        check_pattern = '**/*.py'
+        exclude_path = 'flake_fail.py'
         obj = pyflakes.Pyflakes(exclude_patterns=[exclude_pattern])
-        tasks = list(obj.tasks(check_pattern, TEST_PATH, [exclude_path]))
+        base_dir = TEST_PATH / 'sample'
+        tasks = list(obj.tasks(check_pattern, base_dir, [exclude_path]))
         assert len(tasks) == 1
-        assert tasks[0]['name'] == '{}/sample_ok.py'.format(TEST_PATH)
+        assert tasks[0]['name'] == str(base_dir / 'flake_ok.py')
