@@ -1,15 +1,45 @@
-"""
+'''
 create tasks for coverage.py
 
- * test files must be named in format 'test_xxx.py'
- * packages does not contain sub-packages
-"""
+Usage
+------
+
+Add coverage related tasks to ``dodo.py``::
+
+    from doitpy.coverage import Coverage, PythonPackage
+
+    def task_coverage():
+        """show coverage for all modules including tests"""
+        cov = Coverage([PythonPackage('my_pkg_name', 'tests')],
+                       config=Config(branch=False, parallel=True,
+                                     omit=['tests/no_cover.py'],)
+                       )
+        yield cov.all() # create task `coverage`
+        yield cov.src() # create task `coverage_src`
+        yield cov.by_module() # create tasks `coverage_module:<path/to/test>`
+
+
+From command line, list and execute tasks::
+
+     $ doit list
+     $ doit coverage
+
+'''
+
 import glob
 
 from .config import Config
 
 
+def sep(*args, separator=' '):
+    """join strings or list of strings ignoring None values"""
+    return separator.join(a for a in args if a)
+
+
 class PythonPackage(object):
+    """Contain list of modules of the package (does not handle sub-packages)
+    """
+
     # TODO should track sub-packages
     config = Config(
         test_prefix = 'test_',
@@ -17,16 +47,20 @@ class PythonPackage(object):
         )
 
     def __init__(self, path, test_path=None, config=None):
-        """if test_path is not given assume it is 'tests' inside source package"""
+        """
+        :param (str / pathlib.Path) path: dir path to package.
+        :param (str / pathlib.Path) test_path: if test_path is not given assume
+            it is on config.pkg_test_dir inside source package.
+        """
         self.config = self.config.make(config)
         self.test_prefix = self.config['test_prefix']
 
-        self.src_base = path if path else ''
+        self.src_base = str(path) if path else ''
         if test_path is None:
             self.test_base = '{}/{}'.format(self.src_base,
                                             self.config['pkg_test_dir'])
         else:
-            self.test_base = test_path
+            self.test_base = str(test_path)
         self.src = glob.glob("{}/*.py".format(self.src_base))
         self.test = glob.glob("{}/*.py".format(self.test_base))
         self.test_files = glob.glob("{}/{}*.py".format(
@@ -55,27 +89,29 @@ class Coverage(object):
                 self.pkgs.append(PythonPackage(pkg))
 
 
-    def _action_list(self, modules, test=''):
-        run_options = ''
+    def _action_list(self, modules, test=None):
+        """return list of actions to be used in a doit task"""
+        run_options = []
         if self.config['branch']:
-            run_options += '--branch '
+            run_options.append('--branch')
         if self.config['parallel']:
-            run_options += '--parallel-mode '
+            run_options.append('--parallel-mode')
 
-        report_options = ''
+        report_options = []
         if self.config['omit']:
-            report_options += '--omit {}'.format(','.join(self.config['omit']))
+            omit_list = ','.join(self.config['omit'])
+            report_options.append('--omit {}'.format(omit_list))
 
-        actions = ["coverage run {} {} {}".format(
-                run_options, self.config['cmd_run_test'], test)]
+        actions = [sep("coverage run", sep(*run_options),
+                       self.config['cmd_run_test'], test)]
         if self.config['parallel']:
             actions.append('coverage combine')
-        actions.append("coverage report --show-missing {} {}".format(
-                report_options, " ".join(modules)))
+        actions.append(sep("coverage report --show-missing",
+                           sep(*report_options), sep(*modules)))
         return actions
 
 
-    def all(self):
+    def all(self, basename='coverage'):
         """show coverage for all modules including tests"""
         all_modules = []
 
@@ -84,13 +120,13 @@ class Coverage(object):
                 all_modules.append(module)
 
         yield {
-            'basename': 'coverage',
+            'basename': basename,
             'actions': self._action_list(all_modules),
             'verbosity': 2,
             }
 
 
-    def src(self):
+    def src(self, basename='coverage_src'):
         """show coverage for all modules (exclude tests)"""
         all_modules = []
 
@@ -99,13 +135,13 @@ class Coverage(object):
                 all_modules.append(module)
 
         yield {
-            'basename': 'coverage_src',
+            'basename': basename,
             'actions': self._action_list(all_modules),
             'verbosity': 2,
             }
 
 
-    def by_module(self):
+    def by_module(self, basename='coverage_module'):
         """show coverage for individual modules"""
         for pkg in self.pkgs:
             to_strip = len('{}/{}'.format(pkg.test_base, pkg.test_prefix))
@@ -114,7 +150,7 @@ class Coverage(object):
             for test in tests:
                 source = pkg.src_base + '/' + test[to_strip:]
                 yield {
-                    'basename': 'coverage_module',
+                    'basename': basename,
                     'name': test,
                     'actions': self._action_list([source, test], test),
                     'verbosity': 2,
