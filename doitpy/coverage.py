@@ -31,9 +31,9 @@ import glob
 from .config import Config
 
 
-def sep(*args, separator=' '):
+def sep(*args):
     """join strings or list of strings ignoring None values"""
-    return separator.join(a for a in args if a)
+    return ' '.join(a for a in args if a)
 
 
 class PythonPackage(object):
