@@ -28,7 +28,7 @@ From command line, list and execute tasks::
 
 import glob
 
-from .config import Config
+from confclass import Config
 
 
 def sep(*args):

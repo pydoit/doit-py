@@ -13,6 +13,7 @@ setup (
     platforms = ['any'],
     license = 'MIT',
     packages = ['doitpy'],
+    py_modules = ['confclass'],
     install_requires = [
         'pathlib',
         'doit',

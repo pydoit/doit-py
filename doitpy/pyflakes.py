@@ -21,7 +21,7 @@ from __future__ import absolute_import
 from pathlib import Path
 from pyflakes.scripts.pyflakes import checkPath
 
-from .config import Config
+from confclass import Config
 
 
 def check_path(filename):
@@ -41,7 +41,7 @@ class Pyflakes(object):
                                  from selection
     """
 
-    #: :class:`doitpy.config.Config`
+    #: :class:`confclass.Config`
     config = Config(
         base_dir='.',
         exclude_patterns=[],

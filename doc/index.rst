@@ -19,7 +19,7 @@ Project Details
 configuration
 ===============
 
-.. autoclass:: doitpy.config.Config
+.. autoclass:: confclass.Config
    :show-inheritance:
    :members: make
 

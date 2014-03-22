@@ -1,6 +1,6 @@
 import pytest
 
-from doitpy.config import Config
+from confclass import Config
 
 
 
