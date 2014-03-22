@@ -8,7 +8,7 @@ setup (
     author = 'Eduardo Naufel Schettino',
     author_email = 'schettino72@gmail.com',
     description = 'doit tasks for python stuff',
-    url = 'https://github.com/schettino72/doit-py/',
+    url = 'http://packages.python.org/doit-py',
     keywords = ['doit',],
     platforms = ['any'],
     license = 'MIT',
