@@ -1,8 +1,6 @@
 '''
 create tasks for coverage.py
 
-Usage
-------
 
 Add coverage related tasks to ``dodo.py``::
 
@@ -19,11 +17,6 @@ Add coverage related tasks to ``dodo.py``::
         yield cov.by_module() # create tasks `coverage_module:<path/to/test>`
 
 
-From command line, list and execute tasks::
-
-     $ doit list
-     $ doit coverage
-
 '''
 
 import glob
@@ -38,9 +31,18 @@ def sep(*args):
 
 class PythonPackage(object):
     """Contain list of modules of the package (does not handle sub-packages)
+
+    :ivar list-str src: list of path of source modules
+    :ivar list-str test: list of path of all modules from test folder
+    :ivar list-str test_files: list of path of actual test modules
     """
 
     # TODO should track sub-packages
+
+    #: :class:`confclass.Config`
+    #:
+    #: :var str test_prefix: string prefix on name of files
+    #: :var str pkg_test_dir: path to location of test files
     config = Config(
         test_prefix = 'test_',
         pkg_test_dir = 'tests',
@@ -48,9 +50,9 @@ class PythonPackage(object):
 
     def __init__(self, path, test_path=None, config=None):
         """
-        :param (str / pathlib.Path) path: dir path to package.
-        :param (str / pathlib.Path) test_path: if test_path is not given assume
-            it is on config.pkg_test_dir inside source package.
+        :param str/pathlib.Path path: dir path to package.
+        :param str/pathlib.Path test_path: if test_path is not given assume
+                it is on config.pkg_test_dir inside source package.
         """
         self.config = self.config.make(config)
         self.test_prefix = self.config['test_prefix']
@@ -67,12 +69,21 @@ class PythonPackage(object):
                 self.test_base, self.test_prefix))
 
     def all_modules(self):
+        """Yield all source and test modules."""
         for mod in self.src + self.test:
             yield mod
 
 
 class Coverage(object):
-    """python code coverage"""
+    """generate tasks for coverage.py"""
+
+    #: :class:`confclass.Config`
+    #:
+    #: :var string cmd_run_test: shell command used to run tests
+    #: :var branch bool: measure branche coverage
+    #: :var parallel bool: measure using `--parallel-mode` (needed for
+    #:              subprocess and multiprocess coverage
+    #: :var list-str omit: list of paths to omit from coverage
     config = Config(
         cmd_run_test = "`which py.test`",
         branch=True,
@@ -80,6 +91,9 @@ class Coverage(object):
         omit=[])
 
     def __init__(self, pkgs, config=None):
+        """
+        :param list-str/PythonPackage pkgs: packages to measure coverage
+        """
         self.config = self.config.make(config)
         self.pkgs = []
         for pkg in pkgs:

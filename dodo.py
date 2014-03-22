@@ -59,3 +59,27 @@ def task_sphinx():
         'task_dep': ['spell'],
         }
 
+
+
+def task_manifest():
+    """create manifest file for distutils """
+
+    cmd = "git ls-tree --name-only -r HEAD > MANIFEST"
+    return {'actions': [cmd]}
+
+
+def task_pypi():
+    """upload package to pypi"""
+    return {
+        'actions': ["python setup.py sdist upload"],
+        'task_dep': ['manifest'],
+        }
+
+
+def task_website():
+    """deploy website (sphinx docs)"""
+    action = "python setup.py upload_docs --upload-dir %s"
+    return {'actions': [action % DOC_BUILD_PATH],
+            'task_dep': ['sphinx'],
+            'verbosity': 2,
+            }

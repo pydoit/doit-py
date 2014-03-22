@@ -33,15 +33,15 @@ def check_path(filename):
 
 class Pyflakes(object):
     """generate tasks for pyflakes
-
-    :var str base_dir: list of path patterns of files to be linted
-    :var list-str exclude_patterns: list of pattern of files to be removed
-                                    from selection
-    :var list-str exclude_paths: list of path of files to be removed
-                                 from selection
     """
 
     #: :class:`confclass.Config`
+    #:
+    #: :var str base_dir: list of path patterns of files to be linted
+    #: :var list-str exclude_patterns: list of pattern of files to be removed
+    #:                                from selection
+    #: :var list-str exclude_paths: list of path of files to be removed
+    #:                             from selection
     config = Config(
         base_dir='.',
         exclude_patterns=[],

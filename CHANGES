@@ -3,8 +3,8 @@
 Changes
 =======
 
-0.1.0
-==========
+0.1.0 (*2014-03-22*)
+=======================
 
  - added pyflakes module
  - added coverage module
