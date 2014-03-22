@@ -10,6 +10,10 @@ def test_init():
     assert isinstance(config, dict)
 
 
+def test_repr():
+    config = Config({'foo': 'bar'})
+    assert repr(config) == "Config({'foo': 'bar'})"
+
 class TestConfigSetItem(object):
     def test_setitem(self):
         config = Config({'foo': 'bar'})

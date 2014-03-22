@@ -1,3 +1,21 @@
+"""
+Helper to create tasks that execute pyflakes.
+
+
+Example to create a task for every python module (found recursively from current
+path), excluding test modules and also `doc/conf.py`.
+
+::
+
+    from doit.pyflakes import Pyflakes
+
+    def task_pyflakes():
+        flaker = Pyflakes(exclude_patterns=['test_*'])
+        yield flaker.tasks('**/*.py', exclude_paths=['doc/conf.py'])
+
+
+"""
+
 from __future__ import absolute_import
 
 from pathlib import Path
@@ -8,43 +26,61 @@ from .config import Config
 
 def check_path(filename):
     """a doit action - execute pyflakes in a single file.
-    @return (bool) check succeded
+    :return bool: check succeded
     """
     return not bool(checkPath(filename))
 
 
 class Pyflakes(object):
-    config = Config(exclude_patterns=[])
+    """generate tasks for pyflakes
+
+    :var str base_dir: list of path patterns of files to be linted
+    :var list-str exclude_patterns: list of pattern of files to be removed
+                                    from selection
+    :var list-str exclude_paths: list of path of files to be removed
+                                 from selection
+    """
+
+    #: :class:`doitpy.config.Config`
+    config = Config(
+        base_dir='.',
+        exclude_patterns=[],
+        exclude_paths=[],
+        )
+
 
     def __init__(self, **kwargs):
-        """
-        @param exclude_patterns: (list - str) pathlib patterns to be excluded
+        """:param kwargs: config params
         """
         self.config = self.config.make(kwargs)
 
+
     def __call__(self, py_file):
-        """return task metadata to run pyflakes on a single module"""
+        """Return a task for single file.
+
+        :param str pyfile: path to file
+        :return: task metadata to run pyflakes on a single module
+        """
         return {
             'name': py_file,
             'actions': [(check_path, [py_file])],
             'file_dep': [py_file],
             }
 
-    def tasks(self, pattern, base_dir='.', exclude_path=()):
-        """yield tasks as given by pattern
+    def tasks(self, pattern, **kwargs):
+        """yield one task for each file as given by pattern
 
-        @param pattern: (list - str) list of path patterns of files to be linted
-        @param exclude: (list - str) list of path of files to be removed
-                        from selection
+        :param str pattern: path pattern of files to be linted
         """
 
+        config = self.config.make(**kwargs)
         # yield a task for every py file in selection
-        base = Path(base_dir)
-        excluded_path = set([base.joinpath(e) for e in exclude_path])
+        base = Path(config['base_dir'])
+        excluded = set([base.joinpath(e) for e in config['exclude_paths']])
         for src in base.glob(pattern):
-            if src in excluded_path:
+            if src in excluded:
                 continue
-            for exclude_pattern in self.config['exclude_patterns']:
+            for exclude_pattern in config['exclude_patterns']:
                 if src.match(exclude_pattern):
                     break
             else:

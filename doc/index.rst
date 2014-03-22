@@ -3,10 +3,41 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to doit-py's documentation!
+===================================
+doit-py -  documentation
 ===================================
 
-Contents:
+
+Intro
+=========
+
+
+Project Details
+==================
+
+
+configuration
+===============
+
+.. autoclass:: doitpy.config.Config
+   :show-inheritance:
+   :members: make
+
+
+module: pyflakes
+==================
+
+.. automodule:: doitpy.pyflakes
+
+.. autoclass:: doitpy.pyflakes.Pyflakes
+   :members: __init__, __call__, tasks
+   :member-order: bysource
+
+   .. autoattribute:: doitpy.pyflakes.Pyflakes.config
+
+module: coverage
+==================
+
 
 .. toctree::
    :maxdepth: 2

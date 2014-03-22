@@ -27,8 +27,9 @@ class TestPyflakes(object):
         exclude_pattern = 'tests/*'
         check_pattern = '**/*.py'
         exclude_path = 'flake_fail.py'
-        obj = pyflakes.Pyflakes(exclude_patterns=[exclude_pattern])
         base_dir = TEST_PATH / 'sample'
-        tasks = list(obj.tasks(check_pattern, base_dir, [exclude_path]))
+        obj = pyflakes.Pyflakes(base_dir=base_dir,
+                                exclude_patterns=[exclude_pattern])
+        tasks = list(obj.tasks(check_pattern, exclude_paths=[exclude_path]))
         assert len(tasks) == 1
         assert tasks[0]['name'] == str(base_dir / 'flake_ok.py')
