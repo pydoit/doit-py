@@ -32,4 +32,6 @@ class TestPyflakes(object):
                                 exclude_patterns=[exclude_pattern])
         tasks = list(obj.tasks(check_pattern, exclude_paths=[exclude_path]))
         assert len(tasks) == 2
-        assert tasks[0]['name'] == str(base_dir / 'flake_ok.py')
+        names = [t['name'] for t in tasks]
+        assert str(base_dir / 'flake_ok.py') in names
+        assert str(base_dir / 'flake_compat.py') in names
