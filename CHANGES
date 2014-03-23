@@ -3,6 +3,14 @@
 Changes
 =======
 
+
+0.1.1 (*2014-03-23*)
+=======================
+
+ - pyflakes: consider 'unicode' a builtin even on py3 to support code
+   compatible with both py2 and py3.
+
+
 0.1.0 (*2014-03-22*)
 =======================
 

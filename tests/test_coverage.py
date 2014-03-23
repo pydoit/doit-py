@@ -10,7 +10,7 @@ class TestPythonPackage(object):
     def test_init_tests_in_package(self):
         pkg = PythonPackage(SAMPLE)
         assert pkg.test_base == str(SAMPLE / 'tests')
-        assert len(pkg.src) == 2
+        assert len(pkg.src) == 3
         assert str(SAMPLE / 'flake_ok.py') in pkg.src
         assert str(SAMPLE / 'flake_fail.py') in pkg.src
         assert len(pkg.test) == 1
@@ -25,7 +25,7 @@ class TestPythonPackage(object):
     def test_all_modules(self):
         pkg = PythonPackage(SAMPLE)
         all_modules = list(pkg.all_modules())
-        assert len(all_modules) == 3
+        assert len(all_modules) == 4
         assert str(SAMPLE / 'flake_fail.py') in all_modules
 
 

@@ -19,7 +19,8 @@ path), excluding test modules and also `doc/conf.py`.
 from __future__ import absolute_import
 
 from pathlib import Path
-from pyflakes.scripts.pyflakes import checkPath
+from pyflakes.api import checkPath
+from pyflakes.checker import Checker
 
 from confclass import Config
 
@@ -61,6 +62,10 @@ class Pyflakes(object):
         :param str pyfile: path to file
         :return: task metadata to run pyflakes on a single module
         """
+        # 'unicode' is a builtin in py2 but not on py3.
+        # Make sure pyflakes consider 'unicode' as a builtin so
+        # it does not fail on py3.
+        Checker.builtIns.add('unicode')
         return {
             'name': py_file,
             'actions': [(check_path, [py_file])],

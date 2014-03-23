@@ -31,5 +31,5 @@ class TestPyflakes(object):
         obj = pyflakes.Pyflakes(base_dir=base_dir,
                                 exclude_patterns=[exclude_pattern])
         tasks = list(obj.tasks(check_pattern, exclude_paths=[exclude_path]))
-        assert len(tasks) == 1
+        assert len(tasks) == 2
         assert tasks[0]['name'] == str(base_dir / 'flake_ok.py')

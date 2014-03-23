@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup (
     name = 'doit-py',
-    version = '0.1.0',
+    version = '0.1.1',
     author = 'Eduardo Naufel Schettino',
     author_email = 'schettino72@gmail.com',
     description = 'doit tasks for python stuff',
