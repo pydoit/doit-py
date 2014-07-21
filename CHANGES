@@ -7,6 +7,8 @@ Changes
 =======================
 
  - remove `confclass` module, use external `configclass`
+ - `install_requires` does not include requirements for all modules
+    i.e. you need to manually install `pyflakes`, `coverage`,...
 
 
 0.1.1 (*2014-03-23*)
