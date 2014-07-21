@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from confclass import Config
+from configclass import Config
 from doitpy.coverage import PythonPackage, Coverage
 
 TEST_PATH = Path(__file__).parent

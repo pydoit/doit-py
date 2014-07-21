@@ -3,6 +3,11 @@
 Changes
 =======
 
+0.2.0
+=======================
+
+ - remove `confclass` module, use external `configclass`
+
 
 0.1.1 (*2014-03-23*)
 =======================

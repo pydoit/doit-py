@@ -21,7 +21,7 @@ Add coverage related tasks to ``dodo.py``::
 
 import glob
 
-from confclass import Config
+from configclass import Config
 
 
 def sep(*args):

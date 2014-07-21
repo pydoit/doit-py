@@ -22,7 +22,7 @@ from pathlib import Path
 from pyflakes.api import checkPath
 from pyflakes.checker import Checker
 
-from confclass import Config
+from configclass import Config
 
 
 def check_path(filename):

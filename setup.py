@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup (
     name = 'doit-py',
-    version = '0.1.1',
+    version = '0.2.dev0',
     author = 'Eduardo Naufel Schettino',
     author_email = 'schettino72@gmail.com',
     description = 'doit tasks for python stuff',
@@ -13,11 +13,10 @@ setup (
     platforms = ['any'],
     license = 'MIT',
     packages = ['doitpy'],
-    py_modules = ['confclass'],
     install_requires = [
         'pathlib',
         'doit',
-        'pyflakes',
+        'configclass',
         ],
     classifiers = [
         'Development Status :: 4 - Beta',
