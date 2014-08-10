@@ -2,6 +2,7 @@ language: python
 python:
     - "2.7"
     - "3.3"
+    - "3.4"
 
 install:
   - pip install . --use-mirrors
@@ -14,9 +15,9 @@ branches:
     - test
 
 script:
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then coverage run `which py.test`; fi
   - doit
   - py.test
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then coverage run `which py.test`; fi
 
 after_success:
   - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then coveralls; fi

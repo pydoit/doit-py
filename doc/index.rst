@@ -25,7 +25,7 @@ Project Details
 ==================
 
  - Source code & Project management on github - https://github.com/pydoit/doit-py
- - Website & docs - http://packages.python.org/doit-py
+ - Website & docs - http://pythonhosted.org/doit-py
  - Discussion group - https://groups.google.com/forum/#!forum/python-doit
  - `MIT license <http://opensource.org/licenses/mit-license.php>`_
 

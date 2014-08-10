@@ -19,3 +19,7 @@ Include tasks for:
 
 - pyflakes
 - coverage
+
+`docs`_ http://pythonhosted.org/doit-py
+
+.. _docs: http://pythonhosted.org/doit-py

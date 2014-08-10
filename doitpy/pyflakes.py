@@ -7,7 +7,7 @@ path), excluding test modules and also `doc/conf.py`.
 
 ::
 
-    from doit.pyflakes import Pyflakes
+    from doitpy.pyflakes import Pyflakes
 
     def task_pyflakes():
         flaker = Pyflakes(exclude_patterns=['test_*'])
