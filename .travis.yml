@@ -15,8 +15,8 @@ branches:
     - test
 
 script:
-  - doit
-  - py.test
+#  - doit
+#  - py.test
   - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then coverage run `which py.test`; fi
 
 after_success:
