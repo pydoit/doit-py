@@ -29,12 +29,29 @@ def sep(*args):
     return ' '.join(a for a in args if a)
 
 
-class PythonPackage(object):
+class PythonFiles(object):
+    """python code: a module or a package"""
+
+    def all_modules(self):
+        """Yield all source and test modules."""
+        for mod in self.src + self.test:
+            yield mod
+
+
+class PythonModule(PythonFiles):
+    """reference to a single python module / test for the module"""
+    def __init__(self, path, test_path):
+        self.src = [path]
+        self.test = [test_path]
+
+
+class PythonPackage(PythonFiles):
     """Contain list of modules of the package (does not handle sub-packages)
 
+    :ivar str src_dir: path to dir containing package modules
+    :ivar str test_dir: path to dir containing package tests
     :ivar list-str src: list of path of source modules
     :ivar list-str test: list of path of all modules from test folder
-    :ivar list-str test_files: list of path of actual test modules
     """
 
     # TODO should track sub-packages
@@ -57,21 +74,14 @@ class PythonPackage(object):
         self.config = self.config.make(config)
         self.test_prefix = self.config['test_prefix']
 
-        self.src_base = str(path) if path else ''
+        self.src_dir = str(path) if path else ''
         if test_path is None:
-            self.test_base = '{}/{}'.format(self.src_base,
+            self.test_dir = '{}/{}'.format(self.src_dir,
                                             self.config['pkg_test_dir'])
         else:
-            self.test_base = str(test_path)
-        self.src = glob.glob("{}/*.py".format(self.src_base))
-        self.test = glob.glob("{}/*.py".format(self.test_base))
-        self.test_files = glob.glob("{}/{}*.py".format(
-                self.test_base, self.test_prefix))
-
-    def all_modules(self):
-        """Yield all source and test modules."""
-        for mod in self.src + self.test:
-            yield mod
+            self.test_dir = str(test_path)
+        self.src = glob.glob("{}/*.py".format(self.src_dir))
+        self.test = glob.glob("{}/*.py".format(self.test_dir))
 
 
 class Coverage(object):
@@ -92,15 +102,13 @@ class Coverage(object):
 
     def __init__(self, pkgs, config=None):
         """
-        :param list-str/PythonPackage pkgs: packages to measure coverage
+        :param list-PythonFiles pkgs: packages/modules to measure coverage
         """
         self.config = self.config.make(config)
         self.pkgs = []
         for pkg in pkgs:
-            if isinstance(pkg, PythonPackage):
-                self.pkgs.append(pkg)
-            else:
-                self.pkgs.append(PythonPackage(pkg))
+            assert isinstance(pkg, PythonFiles)
+            self.pkgs.append(pkg)
 
 
     def _action_list(self, modules, test=None):
@@ -158,11 +166,11 @@ class Coverage(object):
     def by_module(self, basename='coverage_module'):
         """show coverage for individual modules"""
         for pkg in self.pkgs:
-            to_strip = len('{}/{}'.format(pkg.test_base, pkg.test_prefix))
-            tests = glob.glob('{}/{}*.py'.format(pkg.test_base,
-                                                 pkg.test_prefix))
+            prefix = '{}/{}'.format(pkg.test_dir, pkg.test_prefix)
+            to_strip = len(prefix)
+            tests = glob.glob('{}*.py'.format(prefix))
             for test in tests:
-                source = pkg.src_base + '/' + test[to_strip:]
+                source = pkg.src_dir + '/' + test[to_strip:]
                 yield {
                     'basename': basename,
                     'name': test,

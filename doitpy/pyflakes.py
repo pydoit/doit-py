@@ -73,7 +73,9 @@ class Pyflakes(object):
             }
 
     def tasks(self, pattern, **kwargs):
-        """yield one task for each file as given by pattern
+        """run pyflakes on python module
+
+        yield one task for each file as given by pattern
 
         :param str pattern: path pattern of files to be linted
         """
