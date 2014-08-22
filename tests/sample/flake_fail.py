@@ -1,2 +1,3 @@
+# a comment without a typo
 def do_nothing():
-    abc = 5
+    number = 5

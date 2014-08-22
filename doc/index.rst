@@ -61,15 +61,6 @@ module: coverage
    .. autoattribute:: doitpy.coverage.Coverage.config
 
 
-configuration
-===============
-
-.. autoclass:: confclass.Config
-   :show-inheritance:
-   :members: make
-
-
-
 
 .. toctree::
    :maxdepth: 2

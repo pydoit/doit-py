@@ -4,15 +4,21 @@ import subprocess
 from doitpy.pyflakes import Pyflakes
 from doitpy.coverage import PythonPackage, Coverage
 from doitpy.pypi import PyPi
+from doitpy import docs
 
 
-DOIT_CONFIG = {'default_tasks': ['pyflakes']}
+DOIT_CONFIG = {'default_tasks': ['pyflakes', 'test']}
 
 
 def task_pyflakes():
     exclude = ['tests/sample/flake_fail.py', 'doc/conf.py']
     yield Pyflakes().tasks('**/*.py', exclude_paths=exclude)
 
+
+def task_test():
+    """run unit-tests"""
+    # XXX
+    return {'actions': ['py.test']}
 
 def task_coverage():
     cov = Coverage([PythonPackage('doitpy', test_path='tests')])
@@ -21,60 +27,19 @@ def task_coverage():
     yield cov.by_module()
 
 
-
-
-#### docs
-
-
-def task_spell():
-    """spell checker for doc files"""
-    # spell always return successful code (0)
-    # so this checks if the output is empty
-    def check_no_output(doc_file):
-        # -l list misspelled words
-        # -p set path of personal dictionary
-        cmd = 'hunspell -l -d en_US -p doc/dictionary.txt %s'
-        output = subprocess.check_output(cmd % doc_file, shell=True,
-                                         universal_newlines=True)
-        if len(output) != 0:
-            print(output)
-            return False
-
-    for doc_file in glob.glob('doc/*.rst') + ['README.rst']:
-        yield {
-            'name': doc_file,
-            'actions': [(check_no_output, (doc_file,))],
-            'file_dep': ['doc/dictionary.txt', doc_file],
-            'verbosity': 2,
-            }
-
-
-DOC_ROOT = 'doc/'
-DOC_BUILD_PATH = DOC_ROOT + '_build/html/'
-def task_sphinx():
-    """generate docs"""
-    action = "sphinx-build -b html -d %s_build/doctrees %s %s"
-    return {
-        'actions': [action % (DOC_ROOT, DOC_ROOT, DOC_BUILD_PATH)],
-        'verbosity': 2,
-        'task_dep': ['spell'],
-        }
-
-
-
 def task_pypi():
     """upload package to pypi"""
-    yield PyPi().git_manifest()
-    yield PyPi().sdist_upload()
+    pkg = PyPi()
+    yield pkg.git_manifest()
+    yield pkg.sdist_upload()
 
 
-def task_website():
-    """deploy website (sphinx docs)"""
-    action = "python setup.py upload_docs --upload-dir %s"
-    return {'actions': [action % DOC_BUILD_PATH],
-            'task_dep': ['sphinx'],
-            'verbosity': 2,
-            }
+def task_docs():
+    doc_files = glob.glob('doc/*.rst') + ['README.rst']
+    yield docs.spell(doc_files, 'doc/dictionary.txt')
+    yield docs.sphinx('doc/', 'doc/_build/html/', task_dep=['spell'])
+    yield docs.pythonhosted_upload('doc/_build/html/', task_dep=['sphinx'])
+
 
 
 ##########################
@@ -83,6 +48,7 @@ from doit.tools import result_dep
 init_file = 'doitpy/__init__.py'
 
 def task_version():
+    """update version on <pkg-name>/__init__.py and doc/conf.py"""
     # get package version from setup.py
     # version must be set with a string literal using single/double quotes
     # but not triple-quotes.
