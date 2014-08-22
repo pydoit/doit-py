@@ -3,6 +3,7 @@ import subprocess
 
 from doitpy.pyflakes import Pyflakes
 from doitpy.coverage import PythonPackage, Coverage
+from doitpy.pypi import PyPi
 
 
 DOIT_CONFIG = {'default_tasks': ['pyflakes']}
@@ -61,19 +62,10 @@ def task_sphinx():
 
 
 
-def task_manifest():
-    """create manifest file for distutils """
-
-    cmd = "git ls-tree --name-only -r HEAD > MANIFEST"
-    return {'actions': [cmd]}
-
-
 def task_pypi():
     """upload package to pypi"""
-    return {
-        'actions': ["python setup.py sdist upload"],
-        'task_dep': ['manifest'],
-        }
+    yield PyPi().git_manifest()
+    yield PyPi().sdist_upload()
 
 
 def task_website():

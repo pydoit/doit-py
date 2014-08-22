@@ -6,6 +6,7 @@ Changes
 0.2.0
 =======================
 
+ - added module `pypi`
  - coverage: support coverage of single modules
  - coverage: remove support getting a string path as a parameter
  - remove `confclass` module, use external `configclass`
