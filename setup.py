@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import sys
 from setuptools import setup
+
+install_requires = [
+    'doit',
+    'configclass',
+    ]
+
+if sys.version_info[0] < 3 or sys.version_info[1] < 4:
+    install_requires.append('pathlib')
 
 setup (
     name = 'doit-py',
@@ -13,11 +22,7 @@ setup (
     platforms = ['any'],
     license = 'MIT',
     packages = ['doitpy'],
-    install_requires = [
-        'pathlib',
-        'doit',
-        'configclass',
-        ],
+    install_requires = install_requires,
     classifiers = [
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
