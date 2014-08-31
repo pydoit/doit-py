@@ -82,5 +82,5 @@ module: pypi
 .. automodule:: doitpy.pypi
 
 .. autoclass:: doitpy.pypi.PyPi
-   :members: __init__, git_manifest, sdist_upload
+   :members: __init__, revision_git, manifest_git, sdist, sdist_upload
    :member-order: bysource

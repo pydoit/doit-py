@@ -31,7 +31,7 @@ def task_coverage():
 def task_pypi():
     """upload package to pypi"""
     pkg = PyPi()
-    yield pkg.git_manifest()
+    yield pkg.manifest_git()
     yield pkg.sdist_upload()
 
 

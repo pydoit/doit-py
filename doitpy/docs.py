@@ -54,15 +54,16 @@ def spell(files, dictionary):
 
 
 # task creator
-def sphinx(root_path, build_path, task_dep=None):
+def sphinx(root_path, build_path, sphinx_opts='', task_dep=None):
     """build sphinx docs
 
     :param str root_path: root path of sphinx docs
     :param str build_path: path generated sphinx docs will be saved in
+    :param str sphinx_opts: `sphinx-build` command line options
     :param list-str task_dep: list of tasks this task will depend on
     """
-    cmd = "sphinx-build -b html -d %s_build/doctrees %s %s"
-    action = cmd % (root_path, root_path, build_path)
+    cmd = "sphinx-build -b html {opts} -d {root}_build/doctrees {root} {build}"
+    action = cmd.format(root=root_path, build=build_path, opts=sphinx_opts)
     # sphinx has its own check it up-to-date so we dont care
     # about always re-executing the task.
     task = {
