@@ -9,8 +9,8 @@ Add coverage related tasks to ``dodo.py``::
     def task_coverage():
         """show coverage for all modules including tests"""
         cov = Coverage([PythonPackage('my_pkg_name', 'tests')],
-                       config=Config(branch=False, parallel=True,
-                                     omit=['tests/no_cover.py'],)
+                       config={'branch':False, 'parallel':True,
+                               'omit': ['tests/no_cover.py']},
                        )
         yield cov.all() # create task `coverage`
         yield cov.src() # create task `coverage_src`
@@ -39,8 +39,17 @@ class PythonFiles(object):
 
 
 class PythonModule(PythonFiles):
-    """reference to a single python module / test for the module"""
+    """reference to a single python module / test for the module
+
+    :ivar list-str src: list of path of source modules
+    :ivar list-str test: list of path of all modules from test folder
+
+    """
     def __init__(self, path, test_path):
+        """
+        :param str/pathlib.Path path: path to python module.
+        :param str/pathlib.Path test_path: path to module with tests.
+        """
         self.src = [path]
         self.test = [test_path]
 

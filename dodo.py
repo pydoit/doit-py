@@ -21,7 +21,8 @@ def task_test():
     return {'actions': ['py.test']}
 
 def task_coverage():
-    cov = Coverage([PythonPackage('doitpy', test_path='tests')])
+    cov = Coverage([PythonPackage('doitpy', test_path='tests')],
+                   config={'branch':False})
     yield cov.all()
     yield cov.src()
     yield cov.by_module()

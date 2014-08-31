@@ -1,4 +1,17 @@
+"""create task to upload project to PyPi
 
+Example:
+ - create a `MANIFEST` file with all tracked files in a git repo
+ - upload an `sdist` package
+
+::
+
+    def task_pypi():
+        pkg = PyPi()
+        yield pkg.git_manifest()
+        yield pkg.sdist_upload()
+
+"""
 
 class PyPi(object):
     """helper to create tasks to upload a python package to PyPi"""

@@ -3,6 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+
 ===================================
 doit-py -  documentation
 ===================================
@@ -15,10 +16,6 @@ Intro
 
 .. _doit: http://pydoit.org
 
-Include tasks for:
-
-- pyflakes
-- coverage
 
 
 Project Details
@@ -47,6 +44,11 @@ module: coverage
 
 .. automodule:: doitpy.coverage
 
+.. autoclass:: doitpy.coverage.PythonModule
+   :members: __init__
+   :member-order: bysource
+
+
 .. autoclass:: doitpy.coverage.PythonPackage
    :members: __init__, all_modules
    :member-order: bysource
@@ -62,15 +64,23 @@ module: coverage
 
 
 
-.. toctree::
-   :maxdepth: 2
-
-
-
-Indices and tables
+module: docs
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. automodule:: doitpy.docs
 
+.. autofunction:: doitpy.docs.spell
+
+.. autofunction:: doitpy.docs.sphinx
+
+.. autofunction:: doitpy.docs.pythonhosted_upload
+
+
+module: pypi
+==================
+
+.. automodule:: doitpy.pypi
+
+.. autoclass:: doitpy.pypi.PyPi
+   :members: __init__, git_manifest, sdist_upload
+   :member-order: bysource

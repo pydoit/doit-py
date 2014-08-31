@@ -19,6 +19,9 @@ Include tasks for:
 
 - pyflakes
 - coverage
+- sphinx documentation
+- PyPi package/documentation upload
+
 
 `docs`_ http://pythonhosted.org/doit-py
 
