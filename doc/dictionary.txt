@@ -28,3 +28,6 @@ quickstart
 sdist
 src
 toctree
+Naufel
+Schettino
+cmd
