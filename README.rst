@@ -26,3 +26,39 @@ Include tasks for:
 `docs`_ http://pythonhosted.org/doit-py
 
 .. _docs: http://pythonhosted.org/doit-py
+
+
+license
+=======
+
+The MIT License
+Copyright (c) 2014 Eduardo Naufel Schettino
+
+see LICENSE file
+
+
+developers / contributors
+==========================
+
+- Eduardo Naufel Schettino
+
+
+install
+=======
+
+::
+
+ $ pip install doit-cmd
+
+or download and::
+
+ $ python setup.py install
+
+
+tests
+=======
+
+To run the tests::
+
+  $ py.test
+
