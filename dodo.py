@@ -3,7 +3,7 @@ import subprocess
 
 from doitpy.pyflakes import Pyflakes
 from doitpy.coverage import PythonPackage, Coverage
-from doitpy.pypi import PyPi
+from doitpy.package import Package
 from doitpy import docs
 
 
@@ -28,10 +28,11 @@ def task_coverage():
     yield cov.by_module()
 
 
-def task_pypi():
+def task_package():
     """upload package to pypi"""
-    pkg = PyPi()
+    pkg = Package()
     yield pkg.manifest_git()
+    yield pkg.sdist()
     yield pkg.sdist_upload()
 
 

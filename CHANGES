@@ -3,6 +3,14 @@
 Changes
 =======
 
+
+0.3.0 (*2014-09-29*)
+=======================
+
+ - rename module `pypi` to package
+ - create `package:manifest` creates a `MANIFEST.in` so it works with setuptools
+
+
 0.2.0 (*2014-09-01*)
 =======================
 

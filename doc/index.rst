@@ -76,11 +76,11 @@ module: docs
 .. autofunction:: doitpy.docs.pythonhosted_upload
 
 
-module: pypi
+module: package
 ==================
 
-.. automodule:: doitpy.pypi
+.. automodule:: doitpy.package
 
-.. autoclass:: doitpy.pypi.PyPi
+.. autoclass:: doitpy.package.Package
    :members: __init__, revision_git, manifest_git, sdist, sdist_upload
    :member-order: bysource
