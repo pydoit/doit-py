@@ -11,14 +11,17 @@ DOIT_CONFIG = {'default_tasks': ['pyflakes', 'test']}
 
 
 def task_pyflakes():
-    exclude = ['tests/sample/flake_fail.py', 'doc/conf.py']
-    yield Pyflakes().tasks('**/*.py', exclude_paths=exclude)
+    flakes = Pyflakes()
+    yield flakes.tasks('*.py')
+    yield flakes.tasks('doitpy/*.py')
+    yield flakes.tasks('tests/**/*.py',
+                       exclude_paths=['tests/sample/flake_fail.py',])
 
 
 def task_test():
     """run unit-tests"""
     # XXX
-    return {'actions': ['py.test']}
+    return {'actions': ['py.test tests']}
 
 def task_coverage():
     cov = Coverage([PythonPackage('doitpy', test_path='tests')],

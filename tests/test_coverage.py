@@ -44,7 +44,8 @@ class TestCoverage(object):
         assert task['basename'] == 'my_cov'
         assert task['actions'] == [
             'coverage run --branch `which py.test`',
-            'coverage report --show-missing {}'.format(' '.join(pkg.all_modules()))
+            'coverage report --show-missing {}'.format(
+                ' '.join(pkg.all_modules()))
             ]
 
     def test_all_module(self):
@@ -56,7 +57,8 @@ class TestCoverage(object):
         assert task['basename'] == 'my_cov'
         assert task['actions'] == [
             'coverage run --branch `which py.test`',
-            'coverage report --show-missing {}'.format(' '.join(pkg.all_modules()))
+            'coverage report --show-missing {}'.format(
+                ' '.join(pkg.all_modules()))
             ]
 
     def test_cover_all_parallel(self):
@@ -70,6 +72,18 @@ class TestCoverage(object):
             'coverage run --parallel-mode `which py.test`',
             'coverage combine',
             'coverage report --show-missing --omit abc {}'.format(
+                ' '.join(pkg.all_modules()))
+            ]
+
+    def test_cover_all_multiprocessing(self):
+        pkg = PythonPackage(SAMPLE)
+        cov = Coverage([pkg], config=Config(concurrency='multiprocessing'))
+        task = list(cov.all('my_cov'))[0]
+        assert task['verbosity'] == 2
+        assert task['basename'] == 'my_cov'
+        assert task['actions'] == [
+            'coverage run --branch --concurrency multiprocessing `which py.test`',
+            'coverage report --show-missing {}'.format(
                 ' '.join(pkg.all_modules()))
             ]
 

@@ -102,11 +102,13 @@ class Coverage(object):
     #: :var branch bool: measure branche coverage
     #: :var parallel bool: measure using `--parallel-mode` (needed for
     #:              subprocess and multiprocess coverage
+    #: :var concurrency str: --concurrency library
     #: :var list-str omit: list of paths to omit from coverage
     config = Config(
         cmd_run_test = "`which py.test`",
         branch=True,
         parallel=False,
+        concurrency='',
         omit=[])
 
     def __init__(self, pkgs, config=None):
@@ -127,6 +129,9 @@ class Coverage(object):
             run_options.append('--branch')
         if self.config['parallel']:
             run_options.append('--parallel-mode')
+        if self.config['concurrency']:
+            run_options.append('--concurrency')
+            run_options.append(self.config['concurrency'])
 
         report_options = []
         if self.config['omit']:

@@ -3,12 +3,13 @@ python:
     - "2.7"
     - "3.3"
     - "3.4"
+    - "3.5"
 
 before_install:
  - sudo apt-get install hunspell
 
 install:
-  - pip install . --use-mirrors
+  - pip install -e . --use-mirrors
   - pip install -r dev_requirements.txt
   - pip install python-coveralls
 
@@ -20,10 +21,10 @@ branches:
 script:
   - doit
   - py.test
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then coverage run `which py.test`; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then coverage run `which py.test`; fi
 
 after_success:
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then coveralls; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then coveralls; fi
 
 
 notifications:

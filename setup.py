@@ -13,7 +13,7 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 4:
 
 setup (
     name = 'doit-py',
-    version = '0.3.0',
+    version = '0.4.0',
     author = 'Eduardo Naufel Schettino',
     author_email = 'schettino72@gmail.com',
     description = 'doit tasks for python stuff',
@@ -35,6 +35,7 @@ setup (
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries',
     ]
 )
