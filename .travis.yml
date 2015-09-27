@@ -5,11 +5,15 @@ python:
     - "3.4"
     - "3.5"
 
-before_install:
- - sudo apt-get install hunspell
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - hunspell
 
 install:
-  - pip install -e . --use-mirrors
+  - pip install -e .
   - pip install -r dev_requirements.txt
   - pip install python-coveralls
 
