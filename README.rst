@@ -49,7 +49,7 @@ install
 
 ::
 
- $ pip install doit-cmd
+ $ pip install doit-py
 
 or download and::
 
