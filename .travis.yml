@@ -1,9 +1,9 @@
 language: python
 python:
-    - "2.7"
-    - "3.3"
-    - "3.4"
     - "3.5"
+    - "3.6"
+    - "3.7"
+    - "3.8"
 
 sudo: false
 
@@ -25,13 +25,13 @@ branches:
 script:
   - doit
   - py.test
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then coverage run `which py.test`; fi
+  - coverage run `which py.test`
 
 after_success:
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then coveralls; fi
+  - coveralls
 
 
 notifications:
-    email:
-        on_success: change
-        on_failure: change
+  email:
+    on_success: change
+    on_failure: change
