@@ -25,10 +25,10 @@ branches:
 script:
   - doit
   - py.test
-  - coverage run `which py.test`
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then coverage run `which py.test`; fi
 
 after_success:
-  - coveralls
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then coveralls; fi
 
 
 notifications:
